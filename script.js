@@ -1,11 +1,9 @@
 import { apiLink } from "./link.js"
 
-
-
-console.log(apiLink)
-
 const userInput = document.getElementById("user-input")
 const submitButton = document.getElementById("submit-button")
+
+const fetchedWordContainer = document.getElementById("fetched-word-container")
 
 const inputDisplay = document.getElementById("input-display")
 const partOfSpeechDisplay = document.getElementById("part-of-speech-display")
@@ -22,49 +20,46 @@ const sourceList = document.getElementById("source-list")
 
 submitButton.addEventListener("click", async () => {
 
+    fetchedWordContainer.innerHTML = "" /* Clear the container before adding new word */
+
     let fetchedWord = userInput.value.trim()
 
     let wordData = await getWord(apiLink, fetchedWord) /* Returns a list containing 1 or multiple objects */
 
-    inputDisplay.innerHTML = `${wordData[0].word} (${wordData[0].phonetic})`
-
-
-    console.log(wordData[0])
+    inputDisplay.innerHTML = `${wordData.word} (${wordData.phonetic})`
 
     /* No error handling as of now */
 
-    for (let aspect of wordData[0].meanings) {
-        console.log(aspect)
-        let partOfSpeech = aspect.partOfSpeech
-        let definitions = aspect.definitions // Array
-        let example = definitions[0].example
-/*         let synonyms = aspect.meanings.synonyms // Array
-        let antonyms = aspect.meanings.antonyms // Array */
+    /* Work on proper iteration, some words can be used as nouns AND verbs AND other stuff
+    wordData.meanings, the drill that contains everything */
 
-        console.log(partOfSpeech)
-        console.log(definitions)
-        console.log(example)
- /*        console.log(synonyms)
-        console.log(antonyms) */
+    fetchedWordContainer.appendChild(inputDisplay)
 
-        partOfSpeechDisplay.innerHTML = partOfSpeech
-        definitionDisplay.innerHTML = definitions[0].definition
+    
+    for (let aspect of wordData.meanings) {
 
-        exampleDisplay.innerHTML = example
-/*         if (synonyms) {
-            synonymsDisplay.innerHTML = synonyms[0]
-        } else {
-            synonymsDisplay.innerHTML = "No synonyms found"
-        }
-        if (antonyms) {
-            antonymsDisplay.innerHTML = antonyms[0]
-        } else {   
-            antonymsDisplay.innerHTML = "No antonyms found"
-        } */
+    let responseBlock = document.createElement("article")
+    responseBlock.classList.add("response-block")
 
+    responseBlock.innerHTML = `<h3>As a ${aspect.partOfSpeech}</h3>
+    <ul id="definition-display"></ul>`
+    
+    fetchedWordContainer.appendChild(responseBlock)
+
+    const definitionDisplay = document.getElementById("definition-display")
+
+    /* Work on variable names to make more readable */
+
+    for (let item of aspect.definitions) {
+        console.log(item)
+        let newDefinition = document.createElement("li")
+        newDefinition.classList.add("definition")
+        newDefinition.innerHTML = `<strong>${item.definition}</strong>`
+        definitionDisplay.appendChild(newDefinition)
+    /* Loop through the meanings array */
     }
 
-})
+}})
 
 /* FUNCTIONS */
 
@@ -76,11 +71,15 @@ function randNum(maxNum) {
     return randIndex
 }
 
+function appendWordToScreen() {
+    /* Write a function to call each time the loop for adding part of speech and definitions for a word iterates */
+}
+
 /* AXIOS FUNCTIONS */
 
 async function getWord(drill, word) {
     let response = await axios.get(`${drill}${word}`)
-    console.log(response.data)
-    return response.data
+    // console.log(response.data)
+    return response.data[0]
     /* Returns a list containing 1 or multiple objects */
 }
