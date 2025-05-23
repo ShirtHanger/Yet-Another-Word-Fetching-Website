@@ -1,0 +1,5 @@
+Dictionary API
+https://api.dictionaryapi.dev/api/v2/entries/en/juice
+https://dictionaryapi.dev/
+https://github.com/ShirtHanger/Website-of-Words
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website of Words</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+
+    <script src="script.js" type="module" defer></script>
+    <script src="object.js" type="module" defer></script>
+    <script src="link.js" type="module" defer></script>
+
+</head>
+
+<body>
+
+    <h1>Words</h1>
+
+    <input type="text" id="user-input" placeholder="Give us a word!">
+    <button id="submit-button">submit</button>
+
+    <!-- The following will auto populate when user presses submit -->
+
+    <h2 id="input-display"><!-- Insert word here --></h2>
+
+        <h3 id="part-of-speech-display"><!-- Insert PartOfSpeech --></h3>
+
+        <p id="definition-display"><!-- Insert Definition --></p>
+        <p id="example-display"><!-- Insert Example --></p>
+
+        <p id="synonym-display"><!-- Insert Synonym --></p>
+
+        <p id="antonym-display"><!-- Insert Antonym --></p>
+
+        <h6 id="source-display">Source(s)</h6>
+        <ul id="source-list">
+            <li></li>
+        </ul>
+
+
+</body>
+</html>
