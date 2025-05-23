@@ -38,26 +38,34 @@ submitButton.addEventListener("click", async () => {
     
     for (let aspect of wordData.meanings) {
 
-    let responseBlock = document.createElement("article")
-    responseBlock.classList.add("response-block")
+        console.log(aspect)
 
-    responseBlock.innerHTML = `<h3>As a ${aspect.partOfSpeech}</h3>
-    <ul id="definition-display"></ul>`
-    
-    fetchedWordContainer.appendChild(responseBlock)
 
-    const definitionDisplay = document.getElementById("definition-display")
+        let responseBlock = document.createElement("article")
+        responseBlock.classList.add("response-block")
 
-    /* Work on variable names to make more readable */
+        responseBlock.innerHTML = `
+            <h3>As a ${aspect.partOfSpeech}</h3>
+            <ul id="${aspect.partOfSpeech}-definition-display"></ul>
+        `
+        
+        fetchedWordContainer.appendChild(responseBlock)
 
-    for (let item of aspect.definitions) {
-        console.log(item)
-        let newDefinition = document.createElement("li")
-        newDefinition.classList.add("definition")
-        newDefinition.innerHTML = `<strong>${item.definition}</strong>`
-        definitionDisplay.appendChild(newDefinition)
-    /* Loop through the meanings array */
-    }
+        /* Redefine defintion-display, with the part of speech attached, so the loop properly targets each part of speech */
+        let definitionDisplay = document.getElementById(`${aspect.partOfSpeech}-definition-display`)
+
+        /* Work on variable names to make more readable */
+
+        for (let item of aspect.definitions) {
+            // console.log(item)
+            let newDefinition = document.createElement("li")
+            newDefinition.innerHTML = `<strong>${item.definition}</strong>`
+            console.log(newDefinition.textContent)
+            definitionDisplay.appendChild(newDefinition)
+        /* Loop through the meanings array */
+        }
+
+        console.log(`completed iteration of ${aspect.partOfSpeech}`)
 
 }})
 
