@@ -6,6 +6,7 @@ const submitButton = document.getElementById("submit-button")
 const fetchedWordContainer = document.getElementById("fetched-word-container")
 
 const inputDisplay = document.getElementById("input-display")
+
 const partOfSpeechDisplay = document.getElementById("part-of-speech-display")
 const definitionDisplay = document.getElementById("definition-display")
 
@@ -38,31 +39,40 @@ submitButton.addEventListener("click", async () => {
     
     for (let aspect of wordData.meanings) {
 
-        console.log(aspect)
-
 
         let responseBlock = document.createElement("article")
         responseBlock.classList.add("response-block")
 
         responseBlock.innerHTML = `
             <h3>As a ${aspect.partOfSpeech}</h3>
-            <ul id="${aspect.partOfSpeech}-definition-display"></ul>
+            <h4>Definitions</h4>
+            <ul class="definition-display" id="${aspect.partOfSpeech}-definition"></ul>
+            <h4>Examples</h4>
+            <ul class="example-display" id="${aspect.partOfSpeech}-example"></ul>
         `
         
         fetchedWordContainer.appendChild(responseBlock)
 
         /* Redefine defintion-display, with the part of speech attached, so the loop properly targets each part of speech */
-        let definitionDisplay = document.getElementById(`${aspect.partOfSpeech}-definition-display`)
+        let definitionDisplay = document.getElementById(`${aspect.partOfSpeech}-definition`)
+        let exampleDisplay = document.getElementById(`${aspect.partOfSpeech}-example`)
 
         /* Work on variable names to make more readable */
 
         for (let item of aspect.definitions) {
             // console.log(item)
             let newDefinition = document.createElement("li")
-            newDefinition.innerHTML = `<strong>${item.definition}</strong>`
-            console.log(newDefinition.textContent)
+            newDefinition.innerHTML = `${item.definition}`
             definitionDisplay.appendChild(newDefinition)
-        /* Loop through the meanings array */
+            
+        }
+
+        for (let item of aspect.definitions) {
+            let newExample = document.createElement("li")
+            if (item.example) {
+                newExample.innerHTML = `${item.example}`
+                exampleDisplay.appendChild(newExample)
+            }
         }
 
         console.log(`completed iteration of ${aspect.partOfSpeech}`)
@@ -79,7 +89,13 @@ function randNum(maxNum) {
     return randIndex
 }
 
-function appendWordToScreen() {
+function appendDefinitionToScreen(item, newDefinition) {
+        
+    /* Write a function to call each time the loop for adding part of speech and definitions for a word iterates */
+}
+
+function appendExampleToScreen(item, newExample) {
+            
     /* Write a function to call each time the loop for adding part of speech and definitions for a word iterates */
 }
 
