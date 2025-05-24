@@ -8,9 +8,9 @@ const fetchedWordContainer = document.getElementById("fetched-word-container")
 const inputDisplay = document.getElementById("input-display")
 
 const partOfSpeechDisplay = document.getElementById("part-of-speech-display")
-const definitionDisplay = document.getElementById("definition-display")
+const definitionList = document.getElementById("definition-list")
 
-const exampleDisplay = document.getElementById("example-display")
+const exampleList = document.getElementById("example-list")
 const synonymsDisplay = document.getElementById("synonyms-display")
 const antonymsDisplay = document.getElementById("antonyms-display")
 
@@ -46,38 +46,85 @@ submitButton.addEventListener("click", async () => {
         responseBlock.innerHTML = `
             <h3>As a ${aspect.partOfSpeech}</h3>
             <h4>Definitions</h4>
-            <ul class="definition-display" id="${aspect.partOfSpeech}-definition"></ul>
+            <ul class="definition-list" id="${aspect.partOfSpeech}-definition"></ul>
             <h4>Examples</h4>
-            <ul class="example-display" id="${aspect.partOfSpeech}-example"></ul>
+            <ul class="example-list" id="${aspect.partOfSpeech}-example"></ul>
+
+
+            <section id="synonyms-antonyms-block">
+
+                <article class="synonyms-display">
+                    <h5>Synonyms</h5>
+                    <ul class="synonyms-list" id="${aspect.partOfSpeech}-synonym"></ul>
+                </article>
+
+                <article class="antonyms-display">
+                    <h5>Antonyms</h5>
+                    <ul class="antonyms-list" id="${aspect.partOfSpeech}-antonym"></ul>
+                </article>
+
+            </section>
         `
         
         fetchedWordContainer.appendChild(responseBlock)
 
-        /* Redefine defintion-display, with the part of speech attached, so the loop properly targets each part of speech */
-        let definitionDisplay = document.getElementById(`${aspect.partOfSpeech}-definition`)
-        let exampleDisplay = document.getElementById(`${aspect.partOfSpeech}-example`)
+        /* Redefines each element, with the part of speech attached, so the loop properly targets each part of speech */
+        let definitionList = document.getElementById(`${aspect.partOfSpeech}-definition`)
+        let exampleList = document.getElementById(`${aspect.partOfSpeech}-example`)
 
         /* Work on variable names to make more readable */
 
+
+        /* Appends each definition to the list of definitions, cannot crunch into function for some reason. */
         for (let item of aspect.definitions) {
             // console.log(item)
             let newDefinition = document.createElement("li")
             newDefinition.innerHTML = `${item.definition}`
-            definitionDisplay.appendChild(newDefinition)
+            definitionList.appendChild(newDefinition)
             
         }
+
+        /* Appends each example to the list of examples, cannot crunch into function for some reason. */
 
         for (let item of aspect.definitions) {
             let newExample = document.createElement("li")
             if (item.example) {
                 newExample.innerHTML = `${item.example}`
-                exampleDisplay.appendChild(newExample)
+                exampleList.appendChild(newExample)
+            }
+        }
+
+        /* Appends each synonym to the list of synonyms, cannot crunch into function for some reason. */
+        if (aspect.synonyms.length > 0) {
+            let synonymList = document.getElementById(`${aspect.partOfSpeech}-synonym`)
+            for (let item of aspect.synonyms) {
+                let newSynonym = document.createElement("li")
+                newSynonym.innerHTML = `${item}`
+                synonymList.appendChild(newSynonym)
+            }
+        }
+
+        /* Appends each antonym to the list of antonyms, cannot crunch into function for some reason. */
+        if (aspect.antonyms.length > 0) {
+            let antonymList = document.getElementById(`${aspect.partOfSpeech}-antonym`)
+            for (let item of aspect.antonyms) {
+                let newAntonym = document.createElement("li")
+                newAntonym.innerHTML = `${item}`
+                antonymList.appendChild(newAntonym)
             }
         }
 
         console.log(`completed iteration of ${aspect.partOfSpeech}`)
 
-}})
+    }
+
+    for (let source of wordData.sourceUrls) {
+        let newSource = document.createElement("li")
+        newSource.innerHTML = `<a href="${source}">${source}</a>`
+        sourceList.appendChild(newSource)
+    }
+
+})
 
 /* FUNCTIONS */
 
