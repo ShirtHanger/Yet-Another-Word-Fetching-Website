@@ -14,25 +14,33 @@ const exampleList = document.getElementById("example-list")
 const synonymsDisplay = document.getElementById("synonyms-display")
 const antonymsDisplay = document.getElementById("antonyms-display")
 
-const sourceDisplay = document.getElementById("source-display")
+const sourceTitle = document.getElementById("source-title")
 const sourceList = document.getElementById("source-list")
 
 /* EVENT LISTENERS */
 
 submitButton.addEventListener("click", async () => {
 
-    fetchedWordContainer.innerHTML = "" /* Clear the container before adding new word */
+    /* Cleans the screen up */
+    // clearScreen()
+    clearScreenButBetter(fetchedWordContainer, sourceList, inputDisplay, userInput)
 
     let fetchedWord = userInput.value.trim()
 
-    let wordData = await getWord(apiLink, fetchedWord) /* Returns a list containing 1 or multiple objects */
+    let wordData = await getWord(apiLink, fetchedWord) /* Returns first index in response */
 
-    inputDisplay.innerHTML = `${wordData.word} (${wordData.phonetic})`
+    /* This will place the word to the screen */
+    /* If no phonetic, print just the word only. */
+    if (!wordData.phonetic) {
+        inputDisplay.innerHTML = `${wordData.word}`
+    } else {
+    /* If there is a word and it has a phonetic, proceed as normal */
+        inputDisplay.innerHTML = `${wordData.word} (${wordData.phonetic})`
+    }
 
     /* No error handling as of now */
 
-    /* Work on proper iteration, some words can be used as nouns AND verbs AND other stuff
-    wordData.meanings, the drill that contains everything */
+    /* wordData.meanings the drill that contains everything */
 
     fetchedWordContainer.appendChild(inputDisplay)
 
@@ -146,6 +154,19 @@ function appendExampleToScreen(item, newExample) {
     /* Write a function to call each time the loop for adding part of speech and definitions for a word iterates */
 }
 
+function clearScreen() {
+    /* Cleans up previous API pull */
+    fetchedWordContainer.innerHTML = ""
+    sourceList.innerHTML = ""
+    inputDisplay.innerHTML = ""
+}
+
+function clearScreenButBetter(...elements) {
+    for (let element of elements) {
+        element.innerHTML = ""
+    }
+}
+
 /* AXIOS FUNCTIONS */
 
 async function getWord(drill, word) {
@@ -153,4 +174,5 @@ async function getWord(drill, word) {
     // console.log(response.data)
     return response.data[0]
     /* Returns a list containing 1 or multiple objects */
+    /* Literally all we need is the first item. IDK why the API is set up like this */
 }
