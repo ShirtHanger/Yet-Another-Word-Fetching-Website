@@ -9,7 +9,7 @@ import * as elements from "./script.js"
 //     appendMeanings,
 //     renderContainerBase,
 //     renderResponse,
-//     renderFullWordData,
+//     renderPartOfSpeechDetails,
 //     renderSourceList,
 //     clearScreen,
 //     getWord
