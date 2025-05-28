@@ -1,16 +1,16 @@
-import * as elements from "./script.js"
+import { userInput, submitButton, fetchedWordContainer, inputDisplay, sourceTitle, sourceList } from "./script.js"
 
 
 
 // export {
 //     randNum,
 //     renderSearchResultTitle,
-//     appendAltWordsToScreen,
+//     appendAltWords,
 //     appendMeanings,
 //     renderContainerBase,
 //     renderResponse,
 //     renderPartOfSpeechDetails,
-//     renderSourceList,
+//     loadSourceList,
 //     clearScreen,
 //     getWord
 // }

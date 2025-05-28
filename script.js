@@ -43,16 +43,16 @@ async function LoadScreen() {
     // Paste the word and phonetic on the screen
     renderSearchResultTitle(wordData)
 
+    // Creates all response blocks, populates them with API data
     renderResponse(wordData)
 
-    renderSourceList(wordData)
+    loadSourceList(wordData)
 }
 
+/* Loads, then fills, a block of content for each part of speech */
 function renderResponse(wordData) {
 
     /* wordData.meanings the drill that contains everything */
-
-    /* Loads, the fills, a block of content for each part of speech */
 
     for (let aspect of wordData.meanings) {
         
@@ -84,6 +84,8 @@ function renderResponse(wordData) {
 
         // Here to let me know the loop was successful
         console.log(`completed iteration of ${aspect.partOfSpeech}`)
+
+        // If no (Actual) data was loaded up, remove the container
         removeEmptyContainer(aspect.partOfSpeech)
 
     }
@@ -112,8 +114,8 @@ function renderPartOfSpeechDetails(
         
 
         // Render all synonyms and antonyms on screen
-        appendAltWordsToScreen(aspect.synonyms, synonymList, synonymTitle)
-        appendAltWordsToScreen(aspect.antonyms, antonymList, antonymTitle)
+        appendAltWords(aspect.synonyms, synonymList, synonymTitle)
+        appendAltWords(aspect.antonyms, antonymList, antonymTitle)
 
         
 
@@ -121,26 +123,12 @@ function renderPartOfSpeechDetails(
 
 /* HELPER FUNCTIONS */
 
+/* Returns a random number between 0 and the length of given array */
+/* Used for randomizing flavot text for website */
 function randNum(maxNum) {
-    /* Returns a random number between 0 and the length of given array */
-    /* Used for randomizing responses for website */
 
     let randIndex = Math.floor(Math.random() * maxNum) 
     return randIndex
-}
-
-/* Renders the user input above the API data pull */
-function renderSearchResultTitle(apiData) {
-
-    /* If no phonetic, display the word only. */
-    if (!apiData.phonetic) {
-        inputDisplay.innerHTML = `${wordData.word}`
-    } else {
-    /* If word has a phonetic, proceed as normal */
-        inputDisplay.innerHTML = `${apiData.word} (${apiData.phonetic})`
-    }
-
-    fetchedWordContainer.appendChild(inputDisplay)
 }
 
 /* Creates the base article element used to auto populate API pull */
@@ -172,6 +160,20 @@ function renderContainerBase(partOfSpeech) {
         return containerBase
 }
 
+/* Loads the word the user searched for, and its phonetic */
+function renderSearchResultTitle(apiData) {
+
+    /* If no phonetic, display the word only. */
+    if (!apiData.phonetic) {
+        inputDisplay.innerHTML = `${wordData.word}`
+    } else {
+    /* If word has a phonetic, proceed as normal */
+        inputDisplay.innerHTML = `${apiData.word} (${apiData.phonetic})`
+    }
+
+    fetchedWordContainer.appendChild(inputDisplay)
+}
+
 /* Maps definitions/examples to the site */
 function appendMeanings(meaning, meaningList) {
 
@@ -182,8 +184,8 @@ function appendMeanings(meaning, meaningList) {
         }
 }
 
-/* Maps synonyms and antonyms to the site */
-function appendAltWordsToScreen(altWordsArray, altWordListEl, altWordTitleEl) {
+/* Maps synonyms/antonyms to the site */
+function appendAltWords(altWordsArray, altWordListEl, altWordTitleEl) {
 
     if (altWordsArray.length > 0 && arrayIsNotEmpty(altWordsArray)) {
 
@@ -202,9 +204,38 @@ function appendAltWordsToScreen(altWordsArray, altWordListEl, altWordTitleEl) {
     
 }
 
+/* Loads title for each list (Definition, synonyms, etc.) if it's NOT empty */
+function loadListTitle(unorderedListEl, listTitleEl, titleText) {
 
+    /* Got this off of StackOverflow IDK how it works */
+    /* https://stackoverflow.com/questions/59541448/how-to-check-if-the-ul-tag-is-empty-using-javascript */
 
-function renderSourceList(wordData) {
+  if (unorderedListEl.innerHTML === "") {
+    listTitleEl.innerHTML = ""
+  } else {
+    listTitleEl.innerHTML = titleText
+  }
+}
+
+/* Removes ALL empty Part-Of-Speech containers from the screen  */
+function removeEmptyContainer(partOfSpeech) {
+    
+    let containers = document.querySelectorAll(".response-block")
+
+    // Loads the empty container base for comparison
+    let emptyContainerBase = renderContainerBase(partOfSpeech)
+
+    // If the innnerHTML of a container is the same as the initial container, that means it has no data. Remoe it!
+    for (let container of containers) {
+        
+        if (container.innerHTML === emptyContainerBase) {
+            container.remove()
+        }
+    }
+}
+
+/* Load up all source links */
+function loadSourceList(wordData) {
 
     let wordSources = wordData.sourceUrls
 
@@ -241,42 +272,13 @@ function arrayIsNotEmpty(array) {
     }
 }
 
-/* Loads title for each list (Definition, synonyms, etc.) if it's NOT empty */
-function loadListTitle(unorderedListEl, listTitleEl, titleText) {
-
-    /* Got this off of StackOverflow IDK how it works */
-    /* https://stackoverflow.com/questions/59541448/how-to-check-if-the-ul-tag-is-empty-using-javascript */
-
-  if (unorderedListEl.innerHTML === "") {
-    listTitleEl.innerHTML = ""
-  } else {
-    listTitleEl.innerHTML = titleText
-  }
-}
-
-/* Removes ALL empty Part-Of-Speech containers from the screen  */
-function removeEmptyContainer(partOfSpeech) {
-    
-    let containers = document.querySelectorAll(".response-block")
-
-    let emptyContainerBase = renderContainerBase(partOfSpeech)
-    /* let containerBase = emptyContainerBase.replace(/<[^>]*>/g, "").trim() */ // Remove all HTML tags and trim whitespace
-
-    for (let container of containers) {
-        console.log(container)
-        if (container.innerHTML === emptyContainerBase) {
-            container.remove()
-        }
-    }
-}
-
 /* AXIOS API FUNCTIONS */
 
 /* Literally just grabs the word from the API */
 async function getWord(drill, word) {
 
     let response = await axios.get(`${drill}${word}`)
-    // console.log(response.data)
+    
     return response.data[0]
     /* Returns a list containing 1 or multiple objects */
     /* Literally all we need is the first item. IDK why the API is set up like this */
