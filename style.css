@@ -4,37 +4,49 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+    padding: 20vw;
+    display: block;
     align-items: center;
-    justify-content: center;
     text-align: center;
 }
 
 h3 {
     background: red;
-    margin-bottom: 20px;
+    margin-bottom: 2vw;
     border: goldenrod;
+    border-radius: 1vw;
+}
+
+h4 {
+    background: green;
+    margin-bottom: 2vw;
+    border: goldenrod;
+    border-radius: 1vw;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 li {
     background: blue;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 2vw;
+    padding: 2vw;
+    border-radius: 1vw;
+    box-shadow: 0 2vw 5vw rgba(0,0,0,0.1);
+    max-width: 20vw;
 }
 
 section {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 a {
