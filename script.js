@@ -136,22 +136,22 @@ function renderContainerBase(partOfSpeech) {
 
         let containerBase = `
             <h3>As a ${partOfSpeech}</h3>
-            <h4 id="${partOfSpeech}-definition-title"></h4>
-            <ul class="definition-list" id="${partOfSpeech}-definition"></ul>
-            <h4 id="${partOfSpeech}-example-title"></h4>
-            <ul class="example-list" id="${partOfSpeech}-example"></ul>
+            <h4 class="meaning-title" id="${partOfSpeech}-definition-title"></h4>
+            <ul class="meaning-list" id="${partOfSpeech}-definition"></ul>
+            <h4 class="meaning-title" id="${partOfSpeech}-example-title"></h4>
+            <ul class="meaning-list" id="${partOfSpeech}-example"></ul>
 
 
             <section id="synonyms-antonyms-block">
 
                 <article class="synonyms-display">
                     <h5 id="${partOfSpeech}-synonym-title"></h5>
-                    <ul class="synonyms-list" id="${partOfSpeech}-synonym"></ul>
+                    <ul class="alt-word-list" id="${partOfSpeech}-synonym"></ul>
                 </article>
 
                 <article class="antonyms-display">
                     <h5 id="${partOfSpeech}-antonym-title"></h5>
-                    <ul class="antonyms-list" id="${partOfSpeech}-antonym"></ul>
+                    <ul class="alt-word-list" id="${partOfSpeech}-antonym"></ul>
                 </article>
 
             </section>
@@ -197,9 +197,25 @@ function appendAltWords(altWordsArray, altWordListEl, altWordTitleEl) {
 
         for (let altWord of altWordsArray) {
             let newAltWordEl = document.createElement("li")
+            newAltWordEl.classList.add("alt-word")
             newAltWordEl.innerHTML = `${altWord}`
             altWordListEl.appendChild(newAltWordEl)
         }
+    }
+
+    /* Must create an event listener INSIDE this function for alt word click to work */
+
+    let altWordElements = document.querySelectorAll(".alt-word")
+
+    /* If a user clicks on a synonym or antonym, it'll load that word! */
+    for (let altWordEl of altWordElements) {
+        
+        altWordEl.addEventListener("click", async () => {
+            
+            let newWord = altWordEl.innerText
+            userInput.value = newWord
+            await LoadScreen()
+        })
     }
     
 }
@@ -242,6 +258,7 @@ function loadSourceList(wordData) {
     /* Maps all source links to the bottom of page */
     for (let source of wordSources) {
         let newSource = document.createElement("li")
+        newSource.classList.add("source-link")
         newSource.innerHTML = `<a href="${source}">${source}</a>`
         sourceList.appendChild(newSource)
     }
